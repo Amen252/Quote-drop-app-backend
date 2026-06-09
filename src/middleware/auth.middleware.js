@@ -15,13 +15,13 @@ export const protect = async (req, res, next) => {
       return res.status(401).json({ message: "No token, Not Authorized" });
     }
 
-    // Call the function to get the correct Uint8Array key
+   
     const secretKey = getJwtSecret();
 
-    // Await verification
+  
     const { payload } = await jwtVerify(token, secretKey);
 
-    // Look up user using userId (matches your registration/login payload!)
+  
     const user = await User.findById(payload.userId).select("-password");
     
     if (!user) {
