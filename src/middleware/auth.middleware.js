@@ -1,13 +1,15 @@
 import { jwtVerify } from "jose";
 import { getJwtSecret } from "../features/utils/getJwtSecret.js"; // Adjust relative path if needed
-import User from "../features/users/user.model.js";
+import User from "../features/Schemas/user.schema.js";
 
 export const protect = async (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
 
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      return res.status(401).json({ message: "Not Authorized, No Token Provided" });
+      return res
+        .status(401)
+        .json({ message: "Not Authorized, No Token Provided" });
     }
 
     const token = authHeader.split(" ")[1];
@@ -15,25 +17,23 @@ export const protect = async (req, res, next) => {
       return res.status(401).json({ message: "No token, Not Authorized" });
     }
 
-   
     const secretKey = getJwtSecret();
 
-  
     const { payload } = await jwtVerify(token, secretKey);
 
-  
     const user = await User.findById(payload.userId).select("-password");
-    
+
     if (!user) {
       return res.status(401).json({ message: "No User found, Not Authorized" });
     }
 
     req.user = user;
     next();
-
   } catch (err) {
     console.error("Auth Middleware Error:", err.message);
-    return res.status(401).json({ message: "Not Authorized, token invalid or expired" });
+    return res
+      .status(401)
+      .json({ message: "Not Authorized, token invalid or expired" });
   }
 };
 

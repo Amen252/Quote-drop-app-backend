@@ -1,4 +1,4 @@
-import User from "../users/user.model.js";
+import User from "../Schemas/user.schema.js";
 import { generateToken } from "../utils/generateToken.js";
 
 //register user

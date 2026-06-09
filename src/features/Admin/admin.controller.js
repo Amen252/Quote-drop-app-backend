@@ -1,5 +1,5 @@
 // src/features/admin/admin.controller.js
-import User from "../users/user.model.js";
+import User from "../Schemas/user.schema.js";
 
 export const getAllUsers = async (req, res, next) => {
   try {
